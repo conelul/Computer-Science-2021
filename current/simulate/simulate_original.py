@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Simulate (a Simon clone)
 # By Al Sweigart al@inventwithpython.com
 # http://inventwithpython.com/pygame
@@ -5,6 +6,7 @@
 
 import random, sys, time, pygame
 from pygame.locals import *
+from pathlib import Path
 
 FPS = 30
 WINDOWWIDTH = 640
@@ -14,6 +16,8 @@ FLASHDELAY = 200 # in milliseconds
 BUTTONSIZE = 200
 BUTTONGAPSIZE = 20
 TIMEOUT = 4 # seconds before game over if no button is pushed.
+
+WORKING_DIR = Path(__file__).parent.absolute()
 
 #                R    G    B
 WHITE        = (255, 255, 255)
@@ -52,10 +56,10 @@ def main():
     infoRect.topleft = (10, WINDOWHEIGHT - 25)
 
     # load the sound files
-    BEEP1 = pygame.mixer.Sound('beep1.ogg')
-    BEEP2 = pygame.mixer.Sound('beep2.ogg')
-    BEEP3 = pygame.mixer.Sound('beep3.ogg')
-    BEEP4 = pygame.mixer.Sound('beep4.ogg')
+    BEEP1 = pygame.mixer.Sound(f'{WORKING_DIR}/sounds/beep1.ogg')
+    BEEP2 = pygame.mixer.Sound(f'{WORKING_DIR}/sounds/beep2.ogg')
+    BEEP3 = pygame.mixer.Sound(f'{WORKING_DIR}/sounds/beep3.ogg')
+    BEEP4 = pygame.mixer.Sound(f'{WORKING_DIR}/sounds/beep4.ogg')
 
     # Initialize some variables for a new game
     pattern = [] # stores the pattern of colors
