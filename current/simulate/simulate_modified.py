@@ -1,22 +1,23 @@
-#!/bin/python3.10
+#!/usr/bin/env python3
 # Simulate (a Simon clone)
-# By Al Sweigart al@inventwithpython.com
+# Originally by Al Sweigart al@inventwithpython.com
+# http://inventwithpython.com/pygame
 # Released under a "Simplified BSD" license
 
-import random, sys, time, pygame
+import random, sys, time, pygame as pg
 from pygame.locals import *
 from pathlib import Path
 
-FPS = 30
-WINDOWWIDTH = 720
-WINDOWHEIGHT = 540
+FPS = 60
+WINDOWWIDTH = 1080
+WINDOWHEIGHT = 720
 FLASHSPEED = 500 # in milliseconds
 FLASHDELAY = 200 # in milliseconds
-BUTTONSIZE = 200
+BUTTONSIZE = 300
 BUTTONGAPSIZE = 20
 TIMEOUT = 4 # seconds before game over if no button is pushed.
 
-FILE_DIRECTORY = Path(__file__).parent.absolute() # Absolute path to working directory
+WORKING_DIR = Path(__file__).parent.absolute()
 
 #                R    G    B
 WHITE        = (255, 255, 255)
@@ -36,29 +37,29 @@ XMARGIN = int((WINDOWWIDTH - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
 YMARGIN = int((WINDOWHEIGHT - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
 
 # Rect objects for each of the four buttons
-YELLOWRECT = pygame.Rect(XMARGIN, YMARGIN, BUTTONSIZE, BUTTONSIZE)
-BLUERECT   = pygame.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN, BUTTONSIZE, BUTTONSIZE)
-REDRECT    = pygame.Rect(XMARGIN, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
-GREENRECT  = pygame.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
+YELLOWRECT = pg.Rect(XMARGIN, YMARGIN, BUTTONSIZE, BUTTONSIZE)
+BLUERECT   = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN, BUTTONSIZE, BUTTONSIZE)
+REDRECT    = pg.Rect(XMARGIN, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
+GREENRECT  = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
 
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, BEEP1, BEEP2, BEEP3, BEEP4
 
-    pygame.init()
-    FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), pygame.SCALED)
-    pygame.display.set_caption('Simulate')
+    pg.init()
+    FPSCLOCK = pg.time.Clock()
+    DISPLAYSURF = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    pg.display.set_caption('Simulate')
 
-    BASICFONT = pygame.font.Font('freesansbold.ttf', 16)
+    BASICFONT = pg.font.Font('freesansbold.ttf', 16)
     infoSurf = BASICFONT.render('Match the pattern by clicking on the button or using the Q, W, A, S keys.', 1, DARKGRAY)
     infoRect = infoSurf.get_rect()
     infoRect.topleft = (10, WINDOWHEIGHT - 25)
 
     # load the sound files
-    BEEP1 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep1.ogg')
-    BEEP2 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep2.ogg')
-    BEEP3 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep3.ogg')
-    BEEP4 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep4.ogg')
+    BEEP1 = pg.mixer.Sound(f'{WORKING_DIR}/sounds/beep1.ogg')
+    BEEP2 = pg.mixer.Sound(f'{WORKING_DIR}/sounds/beep2.ogg')
+    BEEP3 = pg.mixer.Sound(f'{WORKING_DIR}/sounds/beep3.ogg')
+    BEEP4 = pg.mixer.Sound(f'{WORKING_DIR}/sounds/beep4.ogg')
 
     # Initialize some variables for a new game
     pattern = [] # stores the pattern of colors
@@ -81,7 +82,7 @@ def main():
         DISPLAYSURF.blit(infoSurf, infoRect)
 
         checkForQuit()
-        for event in pygame.event.get(): # event handling loop
+        for event in pg.event.get(): # event handling loop
             if event.type == MOUSEBUTTONUP:
                 mousex, mousey = event.pos
                 clickedButton = getButtonClicked(mousex, mousey)
@@ -99,12 +100,12 @@ def main():
 
         if not waitingForInput:
             # play the pattern
-            pygame.display.update()
-            pygame.time.wait(1000)
+            pg.display.update()
+            pg.time.wait(1000)
             pattern.append(random.choice((YELLOW, BLUE, RED, GREEN)))
             for button in pattern:
                 flashButtonAnimation(button)
-                pygame.time.wait(FLASHDELAY)
+                pg.time.wait(FLASHDELAY)
             waitingForInput = True
         else:
             # wait for the player to enter buttons
@@ -129,25 +130,25 @@ def main():
                 currentStep = 0
                 waitingForInput = False
                 score = 0
-                pygame.time.wait(1000)
+                pg.time.wait(1000)
                 changeBackgroundAnimation()
 
-        pygame.display.update()
+        pg.display.update()
         FPSCLOCK.tick(FPS)
 
 
 def terminate():
-    pygame.quit()
+    pg.quit()
     sys.exit()
 
 
 def checkForQuit():
-    for event in pygame.event.get(QUIT): # get all the QUIT events
+    for event in pg.event.get(QUIT): # get all the QUIT events
         terminate() # terminate if any QUIT events are present
-    for event in pygame.event.get(KEYUP): # get all the KEYUP events
+    for event in pg.event.get(KEYUP): # get all the KEYUP events
         if event.key == K_ESCAPE:
             terminate() # terminate if the KEYUP event was for the Esc key
-        pygame.event.post(event) # put the other KEYUP event objects back
+        pg.event.post(event) # put the other KEYUP event objects back
 
 
 def flashButtonAnimation(color, animationSpeed=50):
@@ -169,7 +170,7 @@ def flashButtonAnimation(color, animationSpeed=50):
         rectangle = GREENRECT
 
     origSurf = DISPLAYSURF.copy()
-    flashSurf = pygame.Surface((BUTTONSIZE, BUTTONSIZE))
+    flashSurf = pg.Surface((BUTTONSIZE, BUTTONSIZE))
     flashSurf = flashSurf.convert_alpha()
     r, g, b = flashColor
     sound.play()
@@ -179,23 +180,23 @@ def flashButtonAnimation(color, animationSpeed=50):
             DISPLAYSURF.blit(origSurf, (0, 0))
             flashSurf.fill((r, g, b, alpha))
             DISPLAYSURF.blit(flashSurf, rectangle.topleft)
-            pygame.display.update()
+            pg.display.update()
             FPSCLOCK.tick(FPS)
     DISPLAYSURF.blit(origSurf, (0, 0))
 
 
 def drawButtons():
-    pygame.draw.rect(DISPLAYSURF, YELLOW, YELLOWRECT)
-    pygame.draw.rect(DISPLAYSURF, BLUE,   BLUERECT)
-    pygame.draw.rect(DISPLAYSURF, RED,    REDRECT)
-    pygame.draw.rect(DISPLAYSURF, GREEN,  GREENRECT)
+    pg.draw.rect(DISPLAYSURF, YELLOW, YELLOWRECT)
+    pg.draw.rect(DISPLAYSURF, BLUE,   BLUERECT)
+    pg.draw.rect(DISPLAYSURF, RED,    REDRECT)
+    pg.draw.rect(DISPLAYSURF, GREEN,  GREENRECT)
 
 
 def changeBackgroundAnimation(animationSpeed=40):
     global bgColor
     newBgColor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-    newBgSurf = pygame.Surface((WINDOWWIDTH, WINDOWHEIGHT))
+    newBgSurf = pg.Surface((WINDOWWIDTH, WINDOWHEIGHT))
     newBgSurf = newBgSurf.convert_alpha()
     r, g, b = newBgColor
     for alpha in range(0, 255, animationSpeed): # animation loop
@@ -207,7 +208,7 @@ def changeBackgroundAnimation(animationSpeed=40):
 
         drawButtons() # redraw the buttons on top of the tint
 
-        pygame.display.update()
+        pg.display.update()
         FPSCLOCK.tick(FPS)
     bgColor = newBgColor
 
@@ -215,7 +216,7 @@ def changeBackgroundAnimation(animationSpeed=40):
 def gameOverAnimation(color=WHITE, animationSpeed=50):
     # play all beeps at once, then flash the background
     origSurf = DISPLAYSURF.copy()
-    flashSurf = pygame.Surface(DISPLAYSURF.get_size())
+    flashSurf = pg.Surface(DISPLAYSURF.get_size())
     flashSurf = flashSurf.convert_alpha()
     BEEP1.play() # play all four beeps at the same time, roughly.
     BEEP2.play()
@@ -233,7 +234,7 @@ def gameOverAnimation(color=WHITE, animationSpeed=50):
                 DISPLAYSURF.blit(origSurf, (0, 0))
                 DISPLAYSURF.blit(flashSurf, (0, 0))
                 drawButtons()
-                pygame.display.update()
+                pg.display.update()
                 FPSCLOCK.tick(FPS)
 
 
