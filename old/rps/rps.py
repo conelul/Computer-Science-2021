@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Import random for pseudo-random number generation
 import random
 

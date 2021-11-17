@@ -1,4 +1,4 @@
-#!/bin/python3.10
+#!/usr/bin/env -S python3
 # Slide Puzzle
 # Originally by Al Sweigart al@inventwithpython.com
 # Released under a "Simplified BSD" license

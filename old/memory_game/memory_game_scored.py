@@ -1,4 +1,4 @@
-#!/bin/python3.10
+#!/usr/bin/env python3
 import random, pygame, sys, pickle, os.path
 from pygame.locals import *
 

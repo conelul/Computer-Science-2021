@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.9
 # Imports the given module from the given module_name.
 import random
 
