@@ -1,21 +1,19 @@
-#!/bin/python3.10
 # Simulate (a Simon clone)
-# Originally by Al Sweigart al@inventwithpython.com
+# By Al Sweigart al@inventwithpython.com
+# http://inventwithpython.com/pygame
+# Released under a "Simplified BSD" license
 
 import random, sys, time, pygame
 from pygame.locals import *
-from pathlib import Path
 
 FPS = 30
-WINDOWWIDTH = 720
-WINDOWHEIGHT = 540
+WINDOWWIDTH = 640
+WINDOWHEIGHT = 480
 FLASHSPEED = 500 # in milliseconds
 FLASHDELAY = 200 # in milliseconds
 BUTTONSIZE = 200
 BUTTONGAPSIZE = 20
 TIMEOUT = 4 # seconds before game over if no button is pushed.
-
-FILE_DIRECTORY = Path(__file__).parent.absolute() # Absolute path to working directory
 
 #                R    G    B
 WHITE        = (255, 255, 255)
@@ -45,7 +43,7 @@ def main():
 
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), pygame.SCALED)
+    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Simulate')
 
     BASICFONT = pygame.font.Font('freesansbold.ttf', 16)
@@ -54,10 +52,10 @@ def main():
     infoRect.topleft = (10, WINDOWHEIGHT - 25)
 
     # load the sound files
-    BEEP1 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep1.ogg')
-    BEEP2 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep2.ogg')
-    BEEP3 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep3.ogg')
-    BEEP4 = pygame.mixer.Sound(f'{FILE_DIRECTORY}/sounds/beep4.ogg')
+    BEEP1 = pygame.mixer.Sound('beep1.ogg')
+    BEEP2 = pygame.mixer.Sound('beep2.ogg')
+    BEEP3 = pygame.mixer.Sound('beep3.ogg')
+    BEEP4 = pygame.mixer.Sound('beep4.ogg')
 
     # Initialize some variables for a new game
     pattern = [] # stores the pattern of colors
