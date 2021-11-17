@@ -1,6 +1,7 @@
 #!/bin/python3.10
 # Slide Puzzle
 # Originally by Al Sweigart al@inventwithpython.com
+# Released under a "Simplified BSD" license
 
 import pygame, sys, random
 from pygame.locals import *
