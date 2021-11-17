@@ -1,0 +1,2 @@
+Legacy uses if statements for the main event loop.
+Newer version uses a match case statement for the event loop, requiring python3.10+
