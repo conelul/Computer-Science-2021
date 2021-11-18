@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "password_checker"
+version = "0.1.0"
+description = ""
+authors = ["Conor Scheidt <conelul@protonmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+termcolor = "^1.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
