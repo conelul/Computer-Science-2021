@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 # Imports
-import re, getpass
+import re, getpass, os
 # Fancy colors (YOU MUST INSTALL TERMCOLOR FOR THIS TO WORK)
 from termcolor import colored
-from pathlib import Path
 
-WORKING_DIR = Path(__file__).parent.absolute()
+CURRENT_DIR = os.path.dirname(__file__)
 
 # Check length (allowed length of at least 8 characters)
 def length_check(password):
@@ -41,7 +40,7 @@ def dict_check(password):
    # String of matched words 
     words_in_string = ""
     # Open file
-    with open(f'{WORKING_DIR}/words_alpha.txt', 'r') as f:
+    with open(f'{CURRENT_DIR}/words_alpha.txt', 'r') as f:
         # For every line
         for line in f:
             # Get rid of newline char
