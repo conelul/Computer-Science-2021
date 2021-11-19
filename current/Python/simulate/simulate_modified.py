@@ -4,7 +4,7 @@
 # http://inventwithpython.com/pygame
 # Released under a "Simplified BSD" license
 
-import random, sys, time, os, pygame as pg
+import sys, os, pygame as pg
 from pygame.locals import *
 
 FPS = 60
@@ -32,6 +32,8 @@ YELLOW       = (155, 155,   0)
 DARKGRAY     = ( 40,  40,  40)
 bgColor = BLACK
 
+TEXTCOLOR = WHITE
+
 XMARGIN = int((WINDOWWIDTH - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
 YMARGIN = int((WINDOWHEIGHT - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
 
@@ -41,7 +43,7 @@ BLUERECT   = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN, BUTTONSIZE, 
 REDRECT    = pg.Rect(XMARGIN, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
 GREENRECT  = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
 
-def main():
+def main(position, sequence, current_dir, ):
     global FPSCLOCK, DISPLAYSURF, BASICFONT, BEEP1, BEEP2, BEEP3, BEEP4
 
     pg.init()
@@ -63,7 +65,6 @@ def main():
     # Initialize some variables for a new game
     pattern = [YELLOW, BLUE, RED, GREEN] # PRESET PATTER
     currentStep = 0 # the color the player must push next
-    lastClickTime = 0 # timestamp of the player's last button push
 
     while True: # main game loop
         clickedButton = None # button that was clicked (set to YELLOW, RED, GREEN, or BLUE)
@@ -92,12 +93,16 @@ def main():
             # pushed the correct button
             flashButtonAnimation(clickedButton)
             currentStep += 1
-            lastClickTime = time.time()
 
             if currentStep == len(pattern):
-                print("YOU WON") # WIN STATE
+                textSurf = BASICFONT.render("You won!!!", True, TEXTCOLOR)
+                textRect = textSurf.get_rect()
+                textRect.center = WINDOWWIDTH - 1030, WINDOWHEIGHT - 670
+                DISPLAYSURF.blit(textSurf, textRect)
+                
+                currentStep = 0
 
-        elif (clickedButton and clickedButton != pattern[currentStep]) or (currentStep != 0 and time.time() - TIMEOUT > lastClickTime):
+        elif clickedButton and clickedButton != pattern[currentStep]:
             flashButtonAnimation(clickedButton)
             print("YOU LOST, TRY AGAIN") # LOSE STATE
             currentStep = 0
