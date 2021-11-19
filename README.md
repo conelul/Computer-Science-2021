@@ -8,4 +8,4 @@ The simulate, sliding puzzle, and memory game files are originally by Al Sweigar
 
 ## License
 
-[MIT License](https://choosealicense.com/licenses/mit/)
+Licensed under [MIT License](https://choosealicense.com/licenses/mit/)
