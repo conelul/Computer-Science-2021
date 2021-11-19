@@ -3,9 +3,8 @@
 # Originally by Al Sweigart al@inventwithpython.com
 # Released under a "Simplified BSD" license
 
-import pygame, sys, random
+import pygame, sys, random, os
 from pygame.locals import *
-from pathlib import Path
 
 # Create the constants (go ahead and experiment with different values)
 BOARDWIDTH = 4  # number of columns in the board
@@ -15,7 +14,8 @@ WINDOWWIDTH = 720
 WINDOWHEIGHT = 540
 FPS = 240
 BLANK = None
-FILE_DIRECTORY = Path(__file__).parent.absolute() # Absolute path to working directory
+
+CURRENT_DIR = os.path.dirname(__file__)
 
 #                 R    G    B
 BLACK =         (  0,   0,   0)
@@ -34,7 +34,7 @@ BORDERCOLOR = BLACK
 BASICFONTSIZE = 25
 
 IMAGE_NAME = "seven_scaled.png"
-IMAGE = pygame.image.load(f"{FILE_DIRECTORY}/assets/{IMAGE_NAME}")
+IMAGE = pygame.image.load(f"{CURRENT_DIR}/assets/{IMAGE_NAME}")
 
 BUTTONCOLOR = WHITE
 BUTTONTEXTCOLOR = BLACK
