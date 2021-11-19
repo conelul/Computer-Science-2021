@@ -61,22 +61,14 @@ def main():
     BEEP4 = pg.mixer.Sound(f'{CURRENT_DIR}/sounds/beep4.ogg')
 
     # Initialize some variables for a new game
-    pattern = [] # stores the pattern of colors
+    pattern = [YELLOW, BLUE, RED, GREEN] # PRESET PATTER
     currentStep = 0 # the color the player must push next
     lastClickTime = 0 # timestamp of the player's last button push
-    score = 0
-    # when False, the pattern is playing. when True, waiting for the player to click a colored button:
-    waitingForInput = False
 
     while True: # main game loop
         clickedButton = None # button that was clicked (set to YELLOW, RED, GREEN, or BLUE)
         DISPLAYSURF.fill(bgColor)
         drawButtons()
-
-        scoreSurf = BASICFONT.render('Score: ' + str(score), 1, WHITE)
-        scoreRect = scoreSurf.get_rect()
-        scoreRect.topleft = (WINDOWWIDTH - 100, 10)
-        DISPLAYSURF.blit(scoreSurf, scoreRect)
 
         DISPLAYSURF.blit(infoSurf, infoRect)
 
@@ -95,42 +87,20 @@ def main():
                 elif event.key == K_s:
                     clickedButton = GREEN
 
+        # wait for the player to enter buttons
+        if clickedButton and clickedButton == pattern[currentStep]:
+            # pushed the correct button
+            flashButtonAnimation(clickedButton)
+            currentStep += 1
+            lastClickTime = time.time()
 
+            if currentStep == len(pattern):
+                print("YOU WON")
 
-        if not waitingForInput:
-            # play the pattern
-            pg.display.update()
+        elif (clickedButton and clickedButton != pattern[currentStep]) or (currentStep != 0 and time.time() - TIMEOUT > lastClickTime):
+            print("YOU LOST, TRY AGAIN")
+            currentStep = 0
             pg.time.wait(1000)
-            pattern.append(random.choice((YELLOW, BLUE, RED, GREEN)))
-            for button in pattern:
-                flashButtonAnimation(button)
-                pg.time.wait(FLASHDELAY)
-            waitingForInput = True
-        else:
-            # wait for the player to enter buttons
-            if clickedButton and clickedButton == pattern[currentStep]:
-                # pushed the correct button
-                flashButtonAnimation(clickedButton)
-                currentStep += 1
-                lastClickTime = time.time()
-
-                if currentStep == len(pattern):
-                    # pushed the last button in the pattern
-                    changeBackgroundAnimation()
-                    score += 1
-                    waitingForInput = False
-                    currentStep = 0 # reset back to first step
-
-            elif (clickedButton and clickedButton != pattern[currentStep]) or (currentStep != 0 and time.time() - TIMEOUT > lastClickTime):
-                # pushed the incorrect button, or has timed out
-                gameOverAnimation()
-                # reset the variables for a new game:
-                pattern = []
-                currentStep = 0
-                waitingForInput = False
-                score = 0
-                pg.time.wait(1000)
-                changeBackgroundAnimation()
 
         pg.display.update()
         FPSCLOCK.tick(FPS)
@@ -189,53 +159,6 @@ def drawButtons():
     pg.draw.rect(DISPLAYSURF, BLUE,   BLUERECT)
     pg.draw.rect(DISPLAYSURF, RED,    REDRECT)
     pg.draw.rect(DISPLAYSURF, GREEN,  GREENRECT)
-
-
-def changeBackgroundAnimation(animationSpeed=40):
-    global bgColor
-    newBgColor = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-
-    newBgSurf = pg.Surface((WINDOWWIDTH, WINDOWHEIGHT))
-    newBgSurf = newBgSurf.convert_alpha()
-    r, g, b = newBgColor
-    for alpha in range(0, 255, animationSpeed): # animation loop
-        checkForQuit()
-        DISPLAYSURF.fill(bgColor)
-
-        newBgSurf.fill((r, g, b, alpha))
-        DISPLAYSURF.blit(newBgSurf, (0, 0))
-
-        drawButtons() # redraw the buttons on top of the tint
-
-        pg.display.update()
-        FPSCLOCK.tick(FPS)
-    bgColor = newBgColor
-
-
-def gameOverAnimation(color=WHITE, animationSpeed=50):
-    # play all beeps at once, then flash the background
-    origSurf = DISPLAYSURF.copy()
-    flashSurf = pg.Surface(DISPLAYSURF.get_size())
-    flashSurf = flashSurf.convert_alpha()
-    BEEP1.play() # play all four beeps at the same time, roughly.
-    BEEP2.play()
-    BEEP3.play()
-    BEEP4.play()
-    r, g, b = color
-    for i in range(3): # do the flash 3 times
-        for start, end, step in ((0, 255, 1), (255, 0, -1)):
-            # The first iteration in this loop sets the following for loop
-            # to go from 0 to 255, the second from 255 to 0.
-            for alpha in range(start, end, animationSpeed * step): # animation loop
-                # alpha means transparency. 255 is opaque, 0 is invisible
-                checkForQuit()
-                flashSurf.fill((r, g, b, alpha))
-                DISPLAYSURF.blit(origSurf, (0, 0))
-                DISPLAYSURF.blit(flashSurf, (0, 0))
-                drawButtons()
-                pg.display.update()
-                FPSCLOCK.tick(FPS)
-
 
 
 def getButtonClicked(x, y):
