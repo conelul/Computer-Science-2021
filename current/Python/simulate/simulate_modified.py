@@ -95,10 +95,11 @@ def main():
             lastClickTime = time.time()
 
             if currentStep == len(pattern):
-                print("YOU WON")
+                print("YOU WON") # WIN STATE
 
         elif (clickedButton and clickedButton != pattern[currentStep]) or (currentStep != 0 and time.time() - TIMEOUT > lastClickTime):
-            print("YOU LOST, TRY AGAIN")
+            flashButtonAnimation(clickedButton)
+            print("YOU LOST, TRY AGAIN") # LOSE STATE
             currentStep = 0
             pg.time.wait(1000)
 
