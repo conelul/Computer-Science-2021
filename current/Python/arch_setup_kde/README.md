@@ -9,6 +9,7 @@ This script will install:
 ```shell
 Firefox
 Discord
+Code
 Paru
 Dracula Theme
 ```
