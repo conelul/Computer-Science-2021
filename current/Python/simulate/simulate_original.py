@@ -7,12 +7,12 @@
 import random, sys, time, os, pygame
 from pygame.locals import *
 
-FPS = 30
-WINDOWWIDTH = 640
-WINDOWHEIGHT = 480
+FPS = 60
+WINDOWWIDTH = 1080
+WINDOWHEIGHT = 720
 FLASHSPEED = 500 # in milliseconds
 FLASHDELAY = 200 # in milliseconds
-BUTTONSIZE = 200
+BUTTONSIZE = 300
 BUTTONGAPSIZE = 20
 TIMEOUT = 4 # seconds before game over if no button is pushed.
 
