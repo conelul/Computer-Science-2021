@@ -7,12 +7,8 @@
 import sys, os, pygame as pg
 from pygame.locals import *
 
-FPS = 60
-WINDOWWIDTH = 1080
-WINDOWHEIGHT = 720
 FLASHSPEED = 500 # in milliseconds
 FLASHDELAY = 200 # in milliseconds
-BUTTONSIZE = 300
 BUTTONGAPSIZE = 20
 TIMEOUT = 4 # seconds before game over if no button is pushed.
 
@@ -34,27 +30,29 @@ bgColor = BLACK
 
 TEXTCOLOR = WHITE
 
-XMARGIN = int((WINDOWWIDTH - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
-YMARGIN = int((WINDOWHEIGHT - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
 
-# Rect objects for each of the four buttons
-YELLOWRECT = pg.Rect(XMARGIN, YMARGIN, BUTTONSIZE, BUTTONSIZE)
-BLUERECT   = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN, BUTTONSIZE, BUTTONSIZE)
-REDRECT    = pg.Rect(XMARGIN, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
-GREENRECT  = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
 
-def main(position, sequence, current_dir, ):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, BEEP1, BEEP2, BEEP3, BEEP4
+def main(sequence, resolution=(540,540), fps=60):
+    global BUTTONSIZE, YELLOWRECT, BLUERECT, REDRECT, GREENRECT, XMARGIN, YMARGIN, FPS, FPSCLOCK, DISPLAYSURF, BASICFONT, BEEP1, BEEP2, BEEP3, BEEP4
 
+    BUTTONSIZE = (resolution[0]-40)/2
+    
+    XMARGIN = int((resolution[0] - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
+    YMARGIN = int((resolution[1] - (2 * BUTTONSIZE) - BUTTONGAPSIZE) / 2)
+    
+    # Rect objects for each of the four buttons
+    YELLOWRECT = pg.Rect(XMARGIN, YMARGIN, BUTTONSIZE, BUTTONSIZE)
+    BLUERECT   = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN, BUTTONSIZE, BUTTONSIZE)
+    REDRECT    = pg.Rect(XMARGIN, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
+    GREENRECT  = pg.Rect(XMARGIN + BUTTONSIZE + BUTTONGAPSIZE, YMARGIN + BUTTONSIZE + BUTTONGAPSIZE, BUTTONSIZE, BUTTONSIZE)
+    
     pg.init()
+    FPS = fps
     FPSCLOCK = pg.time.Clock()
-    DISPLAYSURF = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    DISPLAYSURF = pg.display.set_mode((resolution[0], resolution[1]))
     pg.display.set_caption('Simulate')
 
     BASICFONT = pg.font.Font('freesansbold.ttf', 16)
-    infoSurf = BASICFONT.render('Match the pattern by clicking on the button or using the Q, W, A, S keys.', 1, DARKGRAY)
-    infoRect = infoSurf.get_rect()
-    infoRect.topleft = (10, WINDOWHEIGHT - 25)
 
     # load the sound files
     BEEP1 = pg.mixer.Sound(f'{CURRENT_DIR}/sounds/beep1.ogg')
@@ -63,15 +61,13 @@ def main(position, sequence, current_dir, ):
     BEEP4 = pg.mixer.Sound(f'{CURRENT_DIR}/sounds/beep4.ogg')
 
     # Initialize some variables for a new game
-    pattern = [YELLOW, BLUE, RED, GREEN] # PRESET PATTER
+    pattern = sequence # PRESET PATTER
     currentStep = 0 # the color the player must push next
 
     while True: # main game loop
         clickedButton = None # button that was clicked (set to YELLOW, RED, GREEN, or BLUE)
         DISPLAYSURF.fill(bgColor)
         drawButtons()
-
-        DISPLAYSURF.blit(infoSurf, infoRect)
 
         checkForQuit()
         for event in pg.event.get(): # event handling loop
@@ -95,18 +91,11 @@ def main(position, sequence, current_dir, ):
             currentStep += 1
 
             if currentStep == len(pattern):
-                textSurf = BASICFONT.render("You won!!!", True, TEXTCOLOR)
-                textRect = textSurf.get_rect()
-                textRect.center = WINDOWWIDTH - 1030, WINDOWHEIGHT - 670
-                DISPLAYSURF.blit(textSurf, textRect)
-                
-                currentStep = 0
+                return "You solved it!"
 
         elif clickedButton and clickedButton != pattern[currentStep]:
             flashButtonAnimation(clickedButton)
-            print("YOU LOST, TRY AGAIN") # LOSE STATE
-            currentStep = 0
-            pg.time.wait(1000)
+            return None # LOSE STATE
 
         pg.display.update()
         FPSCLOCK.tick(FPS)
