@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.10
 import sys, pygame, simulate_modified as sim
 from pygame.locals import *
-# All this code does is create a button calle "Play"
+# All this code does is create a button called "Play"
 # If you click that button, it calls the simulate game main function from the module, as a demonstration that it can be used in the escape room.
 # Only issue is that it creates a new window (which isn't that bad, but it's different from what i planned)
 
