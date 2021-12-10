@@ -3,7 +3,7 @@
 # Originally by Al Sweigart al@inventwithpython.com
 # Released under a "Simplified BSD" license
 
-import pygame, sys, random, os
+import pygame as pg, sys, random, os
 from pygame.locals import *
 
 # Create the constants (go ahead and experiment with different values)
@@ -34,7 +34,7 @@ BORDERCOLOR = BLACK
 BASICFONTSIZE = 25
 
 IMAGE_NAME = "seven_scaled.png"
-IMAGE = pygame.image.load(f"{CURRENT_DIR}/assets/{IMAGE_NAME}")
+IMAGE = pg.image.load(f"{CURRENT_DIR}/assets/{IMAGE_NAME}")
 
 BUTTONCOLOR = WHITE
 BUTTONTEXTCOLOR = BLACK
@@ -51,11 +51,11 @@ RIGHT = 'right'
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, RESET_SURF, RESET_RECT, NEW_SURF, NEW_RECT, SOLVE_SURF, SOLVE_RECT
 
-    pygame.init()
-    FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), pygame.SCALED)
-    pygame.display.set_caption('Slide Puzzle')
-    BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
+    pg.init()
+    FPSCLOCK = pg.time.Clock()
+    DISPLAYSURF = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), pg.SCALED)
+    pg.display.set_caption('Slide Puzzle')
+    BASICFONT = pg.font.Font('freesansbold.ttf', BASICFONTSIZE)
 
     # Store the option buttons and their rectangles in OPTIONS.
     RESET_SURF, RESET_RECT = makeText('Reset',    TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 135, WINDOWHEIGHT - 90)
@@ -75,7 +75,7 @@ def main():
         drawBoard(mainBoard, msg)
 
         checkForQuit()
-        for event in pygame.event.get(): # event handling loop
+        for event in pg.event.get(): # event handling loop
             if event.type == MOUSEBUTTONUP:
                 spotx, spoty = getSpotClicked(mainBoard, event.pos[0], event.pos[1])
 
@@ -118,21 +118,21 @@ def main():
             slideAnimation(mainBoard, slideTo, 'Click tile or press arrow keys to slide.', 8) # show slide on screen
             makeMove(mainBoard, slideTo)
             allMoves.append(slideTo) # record the slide
-        pygame.display.update()
+        pg.display.update()
         FPSCLOCK.tick(FPS)
 
 def terminate():
-    pygame.quit()
+    pg.quit()
     sys.exit()
 
 
 def checkForQuit():
-    for event in pygame.event.get(QUIT): # get all the QUIT events
+    for event in pg.event.get(QUIT): # get all the QUIT events
         terminate() # terminate if any QUIT events are present
-    for event in pygame.event.get(KEYUP): # get all the KEYUP events
+    for event in pg.event.get(KEYUP): # get all the KEYUP events
         if event.key == K_ESCAPE:
             terminate() # terminate if the KEYUP event was for the Esc key
-        pygame.event.post(event) # put the other KEYUP event objects back
+        pg.event.post(event) # put the other KEYUP event objects back
 
 
 def getStartingBoard():
@@ -212,7 +212,7 @@ def getSpotClicked(board, x, y):
     for tileX in range(len(board)):
         for tileY in range(len(board[0])):
             left, top = getLeftTopOfTile(tileX, tileY)
-            tileRect = pygame.Rect(left, top, TILESIZE, TILESIZE)
+            tileRect = pg.Rect(left, top, TILESIZE, TILESIZE)
             if tileRect.collidepoint(x, y):
                 return (tileX, tileY)
     return (None, None)
@@ -253,7 +253,7 @@ def drawBoard(board, message):
     left, top = getLeftTopOfTile(0, 0)
     width = BOARDWIDTH * TILESIZE
     height = BOARDHEIGHT * TILESIZE
-    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (left - 5, top - 5, width + 11, height + 11), 4)
+    pg.draw.rect(DISPLAYSURF, BORDERCOLOR, (left - 5, top - 5, width + 11, height + 11), 4)
 
     DISPLAYSURF.blit(RESET_SURF, RESET_RECT)
     DISPLAYSURF.blit(NEW_SURF, NEW_RECT)
@@ -282,7 +282,7 @@ def slideAnimation(board, direction, message, animationSpeed):
     baseSurf = DISPLAYSURF.copy()
     # draw a blank space over the moving tile on the baseSurf Surface.
     moveLeft, moveTop = getLeftTopOfTile(movex, movey)
-    pygame.draw.rect(baseSurf, BGCOLOR, (moveLeft, moveTop, TILESIZE, TILESIZE))
+    pg.draw.rect(baseSurf, BGCOLOR, (moveLeft, moveTop, TILESIZE, TILESIZE))
     
     for i in range(0, TILESIZE, animationSpeed):
         # animate the tile sliding over
@@ -297,7 +297,7 @@ def slideAnimation(board, direction, message, animationSpeed):
         if direction == RIGHT:
             drawTile(movex, movey, board[movex][movey], i, 0)
 
-        pygame.display.update()
+        pg.display.update()
         FPSCLOCK.tick(FPS)
 
 
@@ -307,8 +307,8 @@ def generateNewPuzzle(numSlides):
     sequence = []
     board = getStartingBoard()
     drawBoard(board, '')
-    pygame.display.update()
-    pygame.time.wait(500) # pause 500 milliseconds for effect
+    pg.display.update()
+    pg.time.wait(500) # pause 500 milliseconds for effect
     lastMove = None
     for i in range(numSlides):
         move = getRandomMove(board, lastMove)

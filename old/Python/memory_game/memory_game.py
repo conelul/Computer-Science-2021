@@ -9,8 +9,9 @@ WINDOWHEIGHT = 540
 REVEALSPEED = 3
 BOXSIZE = 40 
 GAPSIZE = 10 
-BOARDWIDTH = 10 
-BOARDHEIGHT = 7 
+BOARDWIDTH = 6
+BOARDHEIGHT = 6
+
 # Does the board have an even number of boxes?
 assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.'
 XMARGIN = int((WINDOWWIDTH - (BOARDWIDTH * (BOXSIZE + GAPSIZE))) / 2)

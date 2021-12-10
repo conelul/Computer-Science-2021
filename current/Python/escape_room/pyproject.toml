@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "escape_room"
+version = "0.1.0"
+description = ""
+authors = ["Conor Scheidt <conelul@protonmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+pygame = "^2.1.0"
+pretty-errors = "^1.2.25"
+cx-Freeze = "^6.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
