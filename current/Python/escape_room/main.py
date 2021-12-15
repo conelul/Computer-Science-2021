@@ -64,7 +64,7 @@ def main():
     mixer.init()
     
     mixer.music.load(f'{CURRENT_DIR}/assets/sounds/song.mp3')
-    mixer.music.set_volume(.2)
+    mixer.music.set_volume(.05)
     mixer.music.play()
     
     OPEN_SOUND = pg.mixer.Sound(f'{CURRENT_DIR}/assets/sounds/paper2.mp3')
@@ -78,10 +78,10 @@ def main():
     user_text = "" # Text in the lock input box
     INPUT_RECT = pg.Rect(WINWIDTH / 2 - 200 * SCALE, WINHEIGHT / 2 - 150 * SCALE, 400 * SCALE, 300 * SCALE)
     input_active = False
-    LOCK_CLOSE_SURF, LOCK_CLOSE_RECT = makeText('Close', WHITE, BLACK, WINWIDTH / 2 + 40 * SCALE, WINHEIGHT / 2 + 100 * SCALE) # Close button for the lock
-    SUBMIT_SURF, SUBMIT_RECT = makeText('Submit', WHITE, BLACK, WINWIDTH / 2 - 90 * SCALE, WINHEIGHT / 2 + 100 * SCALE) # Close button for the lock
+    LOCK_CLOSE_SURF, LOCK_CLOSE_RECT = makeText('Close', WHITE, BLACK, WINWIDTH / 2 + 40 * SCALE, WINHEIGHT / 2 + 100 * SCALE + 20) # Close button for the lock
+    SUBMIT_SURF, SUBMIT_RECT = makeText('Submit', WHITE, BLACK, WINWIDTH / 2 - 90 * SCALE, WINHEIGHT / 2 + 100 * SCALE + 20) # Close button for the lock
     SEQUENCE = pg.transform.scale(load_image('sequence.png'), (400, 120))
-    REPLAY_SURF, REPLAY_RECT = makeText('Restart', WHITE, BLACK, WINWIDTH/2 - 50, WINHEIGHT/2 + 50) # Close button for the lock
+    REPLAY_SURF, REPLAY_RECT = makeText('Restart', BLUE, BLACK, WINWIDTH/2 - 75, WINHEIGHT/2 + 100) # Close button for the lock
 
     # Load images
     BACKGROUND = pg.transform.scale(load_image('background.png'), (WINWIDTH, WINHEIGHT))
@@ -129,8 +129,8 @@ def main():
                     playing = MEMORY_GAME.play(playing)
                 elif LOCK_BUTTON.image_rect.collidepoint(event.pos) and not playing:
                     playing = True
-                    OPEN_SOUND.play()
                     lock_opened = True
+                    OPEN_SOUND.play()
                 # Lock input 
                 if INPUT_RECT.collidepoint(event.pos):
                     input_active = True
@@ -138,7 +138,6 @@ def main():
                     input_active = False
                 # Close/Submit buttons for the lock
                 if SUBMIT_RECT.collidepoint(event.pos) and lock_opened:
-                    submits += 1
                     game_over = check_code(user_text)
                     user_text = ""
                 elif LOCK_CLOSE_RECT.collidepoint(event.pos) and lock_opened:
@@ -189,15 +188,19 @@ def check_code(code):
     if code == CODE:
         restart_screen()
         return True
-    else:
+    elif code != "":
         WRONG_SOUND.play()
         return False
 
 def restart_screen():
+    pg.mixer.pause()
     DISPLAYSURF.fill(BLACK)
         
     text_surf = BASICFONT.render("You solved the puzzles and escaped!", True, WHITE)
+    credits_surf = BASICFONT.render("Made by Conor S.", True, WHITE)
+    
     DISPLAYSURF.blit(text_surf, (WINWIDTH/2 - text_surf.get_width()/2 , WINHEIGHT/2 - text_surf.get_height()/2))
+    DISPLAYSURF.blit(credits_surf, (WINWIDTH/2 - text_surf.get_width()/2 + 250, WINHEIGHT/2 - text_surf.get_height()/2 + 60))
     
     DISPLAYSURF.blit(REPLAY_SURF, REPLAY_RECT)
     pg.display.update()

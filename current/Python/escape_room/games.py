@@ -484,6 +484,8 @@ class MemoryGame(Game):
         super().__init__(dest_surf, location, size, fps)
         # Theme presets
         self.IMAGE = pg.transform.scale(image, (size[0], size[1]))
+        self.SLIDE_SOUND = pg.mixer.Sound(f'{CURRENT_DIR}/assets/sounds/slide2.mp3')
+        self.SLIDE_SOUND.set_volume(1)
         self.BGCOLOR = GRAY
         self.LIGHTBGCOLOR = LIGHTGREY
         self.BOXCOLOR = WHITE
@@ -697,6 +699,7 @@ class MemoryGame(Game):
 
     # Revealing a box
     def revealBoxesAnimation(self, board, boxesToReveal):
+        self.SLIDE_SOUND.play()
         # Do the "box reveal" animation.
         for coverage in range(self.BOXSIZE, (-self.REVEALSPEED) - 1, -self.REVEALSPEED):
             self.drawBoxCovers(board, boxesToReveal, coverage)
