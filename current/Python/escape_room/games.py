@@ -398,7 +398,7 @@ class SimulateGame(Game):
 
             elif clickedButton and clickedButton != pattern[currentStep]: # Lose
                 self.flashButtonAnimation(clickedButton)
-                self.flashBackground(RED, 5)
+                self.flashBackground(RED, 5, 1.5)
                 currentStep = 0
 
             self.update()

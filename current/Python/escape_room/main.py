@@ -57,7 +57,7 @@ def main():
     
     pg.init()
     FPSCLOCK = pg.time.Clock() # FPS clock
-    DISPLAYSURF = pg.display.set_mode((WINWIDTH, WINHEIGHT), pg.SCALED) # Screen obj
+    DISPLAYSURF = pg.display.set_mode((WINWIDTH, WINHEIGHT), pg.RESIZABLE) # Screen obj
     pg.display.set_caption('Escape Room') # Window title
     BASICFONT = pg.font.Font('freesansbold.ttf', 50) # Font
     
