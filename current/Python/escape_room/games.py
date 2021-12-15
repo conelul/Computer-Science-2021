@@ -3,6 +3,7 @@
 # ALL GAMES ORIGINALLY BY AL SWEIGART, UNDER THE SIMPLIFIED BSD LICENSE
 
 import sys, random, time, pygame as pg
+from pygame import mixer
 from pathlib import Path
 
 # Colors
@@ -72,6 +73,8 @@ class Game(object):
 class SlidePuzzle(Game):
     def __init__(self, image, dest_surf, location: tuple[int], size: tuple[int], tilesize: int=50, fps: int=60):
         super().__init__(dest_surf, location, size, fps)
+        self.SLIDE_SOUND = pg.mixer.Sound(f'{CURRENT_DIR}/assets/sounds/slide.mp3')
+        self.SLIDE_SOUND.set_volume(.5)
         self.TILESIZE = tilesize
         self.BOARDWIDTH = 4  # number of columns in the board
         self.BOARDHEIGHT = 4 # number of rows in the board
@@ -151,6 +154,7 @@ class SlidePuzzle(Game):
                         slideTo = self.DOWN
 
             if slideTo:
+                self.SLIDE_SOUND.play()
                 self.slideAnimation(self.mainBoard, slideTo, 'Click tile or press arrow keys to slide.', 8) # show slide on screen
                 self.makeMove(self.mainBoard, slideTo)
                 allMoves.append(slideTo) # record the slide
