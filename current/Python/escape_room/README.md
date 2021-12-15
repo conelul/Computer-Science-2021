@@ -1,3 +1,3 @@
-# Work in Progress
+# In Alpha
 
-This is for my escape room game with pygame (this will be updated in the future).
+Alpha version of my escape room game.
