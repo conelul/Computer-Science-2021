@@ -6,7 +6,6 @@ from games import *
 from pathlib import Path
 from pygame import mixer
 
-
 CURRENT_DIR = Path(sys.executable if getattr(sys, 'frozen', False) else __file__).resolve().parent
 
 def load_image(name: str) -> pg.Surface: # Simple function to load image from assets/ with image name
@@ -81,7 +80,7 @@ def main():
     LOCK_CLOSE_SURF, LOCK_CLOSE_RECT = makeText('Close', WHITE, BLACK, WINWIDTH / 2 + 40 * SCALE, WINHEIGHT / 2 + 100 * SCALE + 20) # Close button for the lock
     SUBMIT_SURF, SUBMIT_RECT = makeText('Submit', WHITE, BLACK, WINWIDTH / 2 - 90 * SCALE, WINHEIGHT / 2 + 100 * SCALE + 20) # Close button for the lock
     SEQUENCE = pg.transform.scale(load_image('sequence.png'), (400, 120))
-    REPLAY_SURF, REPLAY_RECT = makeText('Restart', BLUE, BLACK, WINWIDTH/2 - 75, WINHEIGHT/2 + 100) # Close button for the lock
+    REPLAY_SURF, REPLAY_RECT = makeText('Restart', BLUE, BLACK, WINWIDTH/2 - 75, WINHEIGHT/2 + 240) # Close button for the lock
 
     # Load images
     BACKGROUND = pg.transform.scale(load_image('background.png'), (WINWIDTH, WINHEIGHT))
@@ -197,10 +196,15 @@ def restart_screen():
     DISPLAYSURF.fill(BLACK)
         
     text_surf = BASICFONT.render("You solved the puzzles and escaped!", True, WHITE)
-    credits_surf = BASICFONT.render("Made by Conor S.", True, WHITE)
+    credits_surf1 = BASICFONT.render("Made by Conor S.", True, WHITE)
+    credits_surf2 = BASICFONT.render("Minigames by Al Sweigart", True, WHITE)
+    credits_surf3 = BASICFONT.render("Sounds from videvo, free sounds library, and dreamstime", True, WHITE)
     
     DISPLAYSURF.blit(text_surf, (WINWIDTH/2 - text_surf.get_width()/2 , WINHEIGHT/2 - text_surf.get_height()/2))
-    DISPLAYSURF.blit(credits_surf, (WINWIDTH/2 - text_surf.get_width()/2 + 250, WINHEIGHT/2 - text_surf.get_height()/2 + 60))
+    DISPLAYSURF.blit(credits_surf1, (WINWIDTH/2 - text_surf.get_width()/2 + 250, WINHEIGHT/2 - text_surf.get_height()/2 + 60))
+    DISPLAYSURF.blit(credits_surf2, (WINWIDTH/2 - text_surf.get_width()/2 + 100, WINHEIGHT/2 - text_surf.get_height()/2 + 120))
+    DISPLAYSURF.blit(credits_surf3, (WINWIDTH/2 - text_surf.get_width()/2 - 250, WINHEIGHT/2 - text_surf.get_height()/2 + 180))
+
     
     DISPLAYSURF.blit(REPLAY_SURF, REPLAY_RECT)
     pg.display.update()
