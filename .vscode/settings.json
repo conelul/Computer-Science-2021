@@ -1,3 +1,3 @@
 {
-    "python.pythonPath": "current/Python/escape_room/.venv/bin/python"
+    "python.pythonPath": "/bin/python3.10"
 }
