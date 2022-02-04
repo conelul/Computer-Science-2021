@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "headlines"
+version = "0.1.0"
+description = "Home page demos with Flask."
+authors = ["Conor Scheidt <conelul@protonmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.0.2"
+feedparser = "^6.0.8"
+requests = "^2.27.1"
+pyOpenSSL = "^22.0.0"
+
+[tool.poetry.dev-dependencies]
+black = {version = "^21.12b0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

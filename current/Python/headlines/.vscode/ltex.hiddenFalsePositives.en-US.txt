@@ -1,0 +1,1 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QCurrency From: {% for currency in currencies %} {{currency}} {% endfor %} to: {% for currency in currencies %} {{currency}} {% endfor %} 1 {{currency_from}} = {{rate}} {{currency_to}}\\E$"}

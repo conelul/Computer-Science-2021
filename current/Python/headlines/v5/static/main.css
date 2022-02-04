@@ -1,0 +1,20 @@
+html {
+  font-family: "Helvetica";
+  background: white;
+}
+
+body {
+  background: lightgrey;
+  max-width: 900px;
+  margin: 0 auto;
+}
+#header {
+  padding-top: 5;
+  background: rgb(214, 144, 241);
+}
+#inner-header {
+  padding-left: 10;
+}
+#main {
+  padding-left: 10;
+}
