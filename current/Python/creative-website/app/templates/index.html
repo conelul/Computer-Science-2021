@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>On This Date</title>
+    <link rel="stylesheet" href="static/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+        <h1>On This Day: {{day}}</h1>
+        <a href="#events">Events</a>
+        <a href="#births">Births</a>
+        <a href="#deaths">Deaths</a>
+      </div>
+      <div id="location-info">
+        <h3>Your IP: {{ user_ip }}</h3>
+        <h3>Your Approx. Location: {{ user_location }}</h3>
+        <h3>Current Temp: {{ current_weather.main.temp }} Degrees</h3>
+        <h3>Current Weather: {{ current_weather.weather.0.description }}</h3>
+      </div>
+      <div id="date-input">
+        <h2>Enter a Date</h2>
+        <form>
+          <p>
+            <input type="date" name="date" />
+            <input type="submit" value="Submit" />
+          </p>
+        </form>
+      </div>
+      <div id="historical-data">
+        <div id="events">
+          <h2>Historical Events on {{day}}</h2>
+          {% for event in day_historical_data.Events %}
+          <p>
+            {{event["html"] | safe}}
+            <img src="{{ event.links.image_link }}" class="event-image" />
+          </p>
+          {% endfor %}
+        </div>
+        <div id="births">
+          <h2>Historical Births on {{day}}</h2>
+          {% for birth in day_historical_data["Births"] %}
+          <p>{{birth["html"] | safe}}</p>
+          {% endfor %}
+        </div>
+        <div id="deaths">
+          <h2>Historical Deaths on {{day}}</h2>
+          {% for death in day_historical_data["Deaths"] %}
+          <p>{{death["html"] | safe}}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
