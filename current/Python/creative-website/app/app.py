@@ -42,25 +42,6 @@ def get_date(id: str) -> dt:
     return date
 
 
-def get_wiki_image(url: str) -> str | None:
-    """Return a link to the wiki image of a given URL
-
-    Args:
-        url (str): What article to retrive the image from.
-
-    Returns:
-        str: Returns the url of the most important image in the article.
-    """
-    # title = url.split("/")[-1]
-    # response = rq.get(WIKIPEDIA_URL.format(title)).json()
-    # try:
-    #     image_link = list(response["query"]["pages"].values())[0]["original"]["source"]
-    # except KeyError:
-    #     return None
-    # return image_link
-    return None
-
-
 def add_images(data: dict) -> dict:
     """Add image links to the day data dictionary.
 
