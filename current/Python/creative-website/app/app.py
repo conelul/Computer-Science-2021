@@ -13,9 +13,7 @@ DAY_EVENTS_URL = "https://today.zenquotes.io/api/{}"
 IP_INFO_URL = "http://ip-api.com/json/{}"
 IP_GET_URL = "https://api.ipify.org/?format=json"
 WIKIPEDIA_URL = "https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&piprop=original&titles={}"
-HISTORICAL_WEATHER_URL = (
-    "https://api.openweathermap.org/data/2.5/weather?units={units}&lat={lat}&lon={lon}&appid={key}"
-)
+HISTORICAL_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?units={units}&lat={lat}&lon={lon}&appid={key}"
 
 
 app = Flask(__name__)
@@ -53,13 +51,14 @@ def get_wiki_image(url: str) -> str | None:
     Returns:
         str: Returns the url of the most important image in the article.
     """
-    title = url.split("/")[-1]
-    response = rq.get(WIKIPEDIA_URL.format(title)).json()
-    try:
-        image_link = list(response["query"]["pages"].values())[0]["original"]["source"]
-    except KeyError:
-        return None
-    return image_link
+    # title = url.split("/")[-1]
+    # response = rq.get(WIKIPEDIA_URL.format(title)).json()
+    # try:
+    #     image_link = list(response["query"]["pages"].values())[0]["original"]["source"]
+    # except KeyError:
+    #     return None
+    # return image_link
+    return None
 
 
 def add_images(data: dict) -> dict:
@@ -71,13 +70,25 @@ def add_images(data: dict) -> dict:
     Returns:
         dict: Returns a new dictionary with image links added.
     """
+    titles = []
     for event in data["Events"]:
         try:
-            img_link = get_wiki_image(event["links"]["1"]["1"])
+            titles.append(event["links"]["1"]["1"].split("/")[-1])
         except KeyError:
-            img_link = None
-        if img_link:
-            event["links"]["image_link"] = img_link
+            continue
+    query = "|".join(titles)
+    response = rq.get(WIKIPEDIA_URL.format(query)).json()
+    img_links = []
+    for _, page in response["query"]["pages"].items():
+        try:
+           img_links.append(page["original"]["source"])
+        except KeyError:
+            img_links.append("")
+    for i, event in enumerate(data["Events"]):
+        try:
+            event["links"]["image_link"] = img_links[i]
+        except IndexError:
+            event["links"]["image_link"] = ""
     return data
 
 
@@ -101,7 +112,9 @@ def get_historical_data(day: str) -> dict[str, dict[str, list[dict[str, str]]]]:
 def get_weather(lat: str | int, lon: str | int) -> dict[str, str]:
     """Returns the current weather for lat&lon coordinates"""
     response = rq.get(
-        HISTORICAL_WEATHER_URL.format(units="imperial", lat=lat, lon=lon, key=HISTORICAL_WEATHER_KEY)
+        HISTORICAL_WEATHER_URL.format(
+            units="imperial", lat=lat, lon=lon, key=HISTORICAL_WEATHER_KEY
+        )
     ).json()
     return response
 
@@ -126,7 +139,9 @@ def index() -> str:
     user_ip: str = rq.get(IP_GET_URL).json()["ip"]  # Get the user's IP
     logger.info(f"Got user IP: {user_ip}")
 
-    lctn: dict[str, str | int] = get_location(user_ip)  # Get user's location based on ip
+    lctn: dict[str, str | int] = get_location(
+        user_ip
+    )  # Get user's location based on ip
     str_lctn: str = f"{lctn['city']}, {lctn['countryCode']}"
     logger.info(f"Got user location information from the API: {str_lctn}")
 

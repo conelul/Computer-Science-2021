@@ -11,24 +11,24 @@
         <a href="#events">Events</a>
         <a href="#births">Births</a>
         <a href="#deaths">Deaths</a>
-      </div>
-      <div id="location-info">
-        <h3>Your IP: {{ user_ip }}</h3>
-        <h3>Your Approx. Location: {{ user_location }}</h3>
-        <h3>Current Temp: {{ current_weather.main.temp }} Degrees</h3>
-        <h3>Current Weather: {{ current_weather.weather.0.description }}</h3>
-      </div>
-      <div id="date-input">
-        <h2>Enter a Date</h2>
-        <form>
-          <p>
-            <input type="date" name="date" />
-            <input type="submit" value="Submit" />
-          </p>
-        </form>
+        <div id="location-info">
+          <h4>IP: {{ user_ip }}</h4>
+          <h4>Location: {{ user_location }}</h4>
+          <h4>Temp: {{ current_weather.main.temp }}&#176;F</h4>
+          <h4>Weather: {{ current_weather.weather.0.description }}</h4>
+        </div>
+        <div id="date-input">
+          <h1>Enter a Date</h1>
+          <form>
+            <p>
+              <input type="date" name="date" />
+              <input type="submit" value="Submit" />
+            </p>
+          </form>
+        </div>
       </div>
       <div id="historical-data">
-        <div id="events">
+        <div id="events" class="col-4">
           <h2>Historical Events on {{day}}</h2>
           {% for event in day_historical_data.Events %}
           <p>
@@ -37,13 +37,13 @@
           </p>
           {% endfor %}
         </div>
-        <div id="births">
+        <div id="births" class="col-4">
           <h2>Historical Births on {{day}}</h2>
           {% for birth in day_historical_data["Births"] %}
           <p>{{birth["html"] | safe}}</p>
           {% endfor %}
         </div>
-        <div id="deaths">
+        <div id="deaths" class="col-4">
           <h2>Historical Deaths on {{day}}</h2>
           {% for death in day_historical_data["Deaths"] %}
           <p>{{death["html"] | safe}}</p>
