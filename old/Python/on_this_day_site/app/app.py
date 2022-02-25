@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, request
-import wikipedia as wiki
 import requests as rq
 from datetime import datetime as dt
 from loguru import logger

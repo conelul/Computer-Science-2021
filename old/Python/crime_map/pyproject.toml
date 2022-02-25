@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "creative-website"
+name = "crime-map"
 version = "0.1.0"
 description = ""
 authors = ["Conor Scheidt <conelul@protonmail.com>"]
@@ -7,10 +7,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Flask = "^2.0.2"
-requests = "^2.27.1"
+Flask = "^2.0.3"
 loguru = "^0.6.0"
-wikipedia = "^1.4.0"
+dateparser = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^22.1.0", allow-prereleases = true}
